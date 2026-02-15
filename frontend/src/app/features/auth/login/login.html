@@ -1,0 +1,41 @@
+<section class="login-wrap">
+  <div class="card login-card">
+    <h1>Secure Sign In</h1>
+    <p class="sub">National Cybercrime Investigation and Evidence Management</p>
+
+    <form (ngSubmit)="submit()" class="grid">
+      <label>
+        Username
+        <input [(ngModel)]="userName" name="userName" required />
+      </label>
+
+      <label *ngIf="!mfaRequired">
+        Password
+        <input [(ngModel)]="password" name="password" type="password" required />
+      </label>
+
+      <label *ngIf="!mfaRequired">
+        Device Info
+        <input [(ngModel)]="deviceInfo" name="deviceInfo" />
+      </label>
+
+      <label *ngIf="mfaRequired">
+        OTP Code
+        <input
+          [(ngModel)]="otpCode"
+          name="otpCode"
+          maxlength="6"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          required />
+      </label>
+
+      <button type="submit" [disabled]="loading || (mfaRequired && otpCode.trim().length !== 6)">
+        {{ loading ? 'Please wait...' : (mfaRequired ? 'Verify MFA' : 'Login') }}
+      </button>
+    </form>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+    <p class="hint" *ngIf="mfaRequired">MFA is required. Use OTP from your notifications.</p>
+  </div>
+</section>

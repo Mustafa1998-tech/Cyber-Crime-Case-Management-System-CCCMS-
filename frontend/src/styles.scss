@@ -1,0 +1,88 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Sans+3:wght@400;600;700&display=swap");
+
+:root {
+  --bg-0: #0b1020;
+  --bg-1: #141b31;
+  --ink-0: #eff5ff;
+  --ink-1: #c7d4ea;
+  --accent: #d95b30;
+  --accent-soft: #ffbf6b;
+  --panel: rgba(20, 29, 51, 0.74);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: "Source Sans 3", sans-serif;
+  color: var(--ink-0);
+  background:
+    radial-gradient(circle at 5% 15%, rgba(217, 91, 48, 0.36), transparent 35%),
+    radial-gradient(circle at 92% 88%, rgba(255, 191, 107, 0.2), transparent 30%),
+    linear-gradient(135deg, var(--bg-0), var(--bg-1));
+}
+
+h1,
+h2,
+h3 {
+  margin-top: 0;
+  font-family: "Space Grotesk", sans-serif;
+  letter-spacing: 0.02em;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  padding: 1rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  background: rgba(9, 14, 25, 0.65);
+  color: var(--ink-0);
+  padding: 0.55rem 0.7rem;
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(120deg, var(--accent), var(--accent-soft));
+  color: #0f172a;
+  font-weight: 700;
+  padding: 0.55rem 0.9rem;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.55rem 0.45rem;
+}

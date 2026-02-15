@@ -1,0 +1,17 @@
+.admin {
+  max-width: 680px;
+}
+
+.toggle {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.toggle input {
+  width: auto;
+}
+
+.message {
+  color: var(--accent-soft);
+}

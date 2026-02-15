@@ -1,0 +1,61 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: cccms-sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:-sa@123456789}"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P $$MSSQL_SA_PASSWORD -Q \"SELECT 1\" || exit 1"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cccms-api
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=NciemsDb.Dev;User Id=sa;Password=${MSSQL_SA_PASSWORD:-sa@123456789};TrustServerCertificate=True;MultipleActiveResultSets=True"
+      HttpsRedirection__HttpsPort: "7261"
+      Kestrel__Endpoints__Http__Url: "http://0.0.0.0:5289"
+      Kestrel__Endpoints__Https__Url: "https://0.0.0.0:7261"
+    ports:
+      - "5289:5289"
+      - "7261:7261"
+    volumes:
+      - api-logs:/app/logs
+      - api-evidence:/app/EvidenceStore
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cccms-frontend
+    depends_on:
+      - api
+    ports:
+      - "4200:80"
+    restart: unless-stopped
+
+volumes:
+  sqlserver-data:
+  api-logs:
+  api-evidence:

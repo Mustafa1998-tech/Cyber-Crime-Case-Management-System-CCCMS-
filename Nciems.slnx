@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/backend/src/">
+    <Project Path="backend/src/Nciems.Api/Nciems.Api.csproj" />
+    <Project Path="backend/src/Nciems.Application/Nciems.Application.csproj" />
+    <Project Path="backend/src/Nciems.Domain/Nciems.Domain.csproj" />
+    <Project Path="backend/src/Nciems.Infrastructure/Nciems.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/backend/tests/">
+    <Project Path="backend/tests/Nciems.Security.Tests/Nciems.Security.Tests.csproj" />
+  </Folder>
+</Solution>

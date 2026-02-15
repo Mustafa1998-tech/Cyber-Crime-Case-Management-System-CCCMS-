@@ -1,0 +1,9 @@
+**/bin/
+**/obj/
+**/.vs/
+**/.vscode/
+**/*.user
+**/*.suo
+tests/
+src/Nciems.Api/logs/
+src/Nciems.Api/EvidenceStore/

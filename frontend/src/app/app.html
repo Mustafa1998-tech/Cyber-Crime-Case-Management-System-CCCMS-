@@ -1,0 +1,20 @@
+<div class="shell">
+  <header class="topbar">
+    <div class="brand">NCIEMS</div>
+    <nav *ngIf="authService.isAuthenticated" class="nav">
+      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/complaints" routerLinkActive="active">Complaints</a>
+      <a routerLink="/cases" routerLinkActive="active">Cases</a>
+      <a routerLink="/evidence" routerLinkActive="active">Evidence</a>
+      <a routerLink="/reports" routerLinkActive="active">Reports</a>
+      <a routerLink="/admin" routerLinkActive="active">Admin</a>
+    </nav>
+    <div class="auth-slot">
+      <button *ngIf="authService.isAuthenticated" type="button" (click)="logout()">Logout</button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <router-outlet></router-outlet>
+  </main>
+</div>

@@ -1,0 +1,36 @@
+<section class="card admin">
+  <h2>User Provisioning</h2>
+  <p>Create operational users and assign mandatory roles.</p>
+
+  <div class="grid">
+    <label>
+      Username
+      <input [(ngModel)]="form.userName" />
+    </label>
+    <label>
+      Email
+      <input [(ngModel)]="form.email" />
+    </label>
+    <label>
+      Password
+      <input [(ngModel)]="form.password" type="password" />
+    </label>
+    <label>
+      Primary Role
+      <select [(ngModel)]="form.roles[0]">
+        <option>SystemAdmin</option>
+        <option>IntakeOfficer</option>
+        <option>Investigator</option>
+        <option>ForensicAnalyst</option>
+        <option>Prosecutor</option>
+      </select>
+    </label>
+    <label class="toggle">
+      <input type="checkbox" [(ngModel)]="form.mfaEnabled" />
+      MFA Enabled
+    </label>
+    <button type="button" (click)="createUser()">Create User</button>
+  </div>
+
+  <p class="message">{{ message }}</p>
+</section>

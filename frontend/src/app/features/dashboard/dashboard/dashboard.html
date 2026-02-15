@@ -1,0 +1,66 @@
+<section>
+  <h1>Operational Dashboard</h1>
+  <p class="meta">Live metrics for active cybercrime operations.</p>
+
+  <div class="grid cards" *ngIf="!loading">
+    <article class="card metric">
+      <h2>{{ complaintCount }}</h2>
+      <p>Total Complaints</p>
+    </article>
+    <article class="card metric">
+      <h2>{{ openCases }}</h2>
+      <p>Open Cases</p>
+    </article>
+    <article class="card metric">
+      <h2>{{ underInvestigation }}</h2>
+      <p>Under Investigation</p>
+    </article>
+    <article class="card metric">
+      <h2>{{ forensicAnalysis }}</h2>
+      <p>Forensic Analysis Stage</p>
+    </article>
+  </div>
+
+  <div class="grid insights" *ngIf="!loading">
+    <article class="card">
+      <h3>Top Crime Types</h3>
+      <div class="list-row" *ngFor="let item of topCrimeTypes">
+        <div class="head">
+          <span>{{ item.label }}</span>
+          <strong>{{ item.value }}</strong>
+        </div>
+        <div class="bar">
+          <span [style.width.%]="item.percent"></span>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <h3>Complaints By State</h3>
+      <div class="list-row" *ngFor="let item of topStates">
+        <div class="head">
+          <span>{{ item.label }}</span>
+          <strong>{{ item.value }}</strong>
+        </div>
+        <div class="bar">
+          <span [style.width.%]="item.percent"></span>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <article class="card trend" *ngIf="!loading">
+    <h3>Monthly Complaint Trend (Last 12 Months)</h3>
+    <div class="trend-grid">
+      <div class="month" *ngFor="let bucket of monthlyTrend">
+        <span class="label">{{ bucket.label }}</span>
+        <div class="trend-bar">
+          <span [style.height.%]="bucket.percent"></span>
+        </div>
+        <strong>{{ bucket.value }}</strong>
+      </div>
+    </div>
+  </article>
+
+  <div class="card" *ngIf="loading">Loading dashboard...</div>
+</section>

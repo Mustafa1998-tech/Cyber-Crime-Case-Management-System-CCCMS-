@@ -1,0 +1,51 @@
+<section class="grid">
+  <article class="card assign">
+    <h2>Assign Investigator</h2>
+    <div class="grid assign-form">
+      <label>
+        Case ID
+        <input type="number" [(ngModel)]="selectedCaseId" />
+      </label>
+      <label>
+        Investigator User ID
+        <input type="number" [(ngModel)]="investigatorId" />
+      </label>
+      <button type="button" (click)="assign()">Assign</button>
+    </div>
+  </article>
+
+  <article class="card">
+    <h2>Cases</h2>
+    <div *ngIf="loading">Loading cases...</div>
+    <table *ngIf="!loading">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Complaint ID</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Priority</th>
+          <th>Update Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let caseItem of cases">
+          <td>{{ caseItem.id }}</td>
+          <td>{{ caseItem.complaintId }}</td>
+          <td>{{ caseItem.complaintCrimeType }}</td>
+          <td>{{ caseItem.status }}</td>
+          <td>{{ caseItem.priority }}</td>
+          <td>
+            <select #statusSelect>
+              <option [value]="2">Under Investigation</option>
+              <option [value]="3">Forensic Analysis</option>
+              <option [value]="4">Prosecutor Review</option>
+              <option [value]="5">Closed</option>
+            </select>
+            <button type="button" (click)="changeStatus(caseItem.id, statusSelect.value)">Save</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </article>
+</section>

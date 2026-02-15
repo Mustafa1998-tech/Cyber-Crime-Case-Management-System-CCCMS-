@@ -1,0 +1,57 @@
+<section class="grid layout">
+  <article class="card">
+    <h2>Create Complaint</h2>
+    <div class="grid">
+      <label>
+        Complainant Name
+        <input [(ngModel)]="form.complainantName" />
+      </label>
+      <label>
+        Phone
+        <input [(ngModel)]="form.phone" />
+      </label>
+      <label>
+        Crime Type
+        <select [(ngModel)]="form.crimeType">
+          <option>Extortion</option>
+          <option>Fraud</option>
+          <option>Defamation</option>
+          <option>Unauthorized Access</option>
+        </select>
+      </label>
+      <label>
+        Description
+        <textarea rows="4" [(ngModel)]="form.description"></textarea>
+      </label>
+      <button type="button" (click)="create()">Submit Complaint</button>
+    </div>
+  </article>
+
+  <article class="card">
+    <h2>Complaint Queue</h2>
+    <div *ngIf="loading">Loading complaints...</div>
+    <table *ngIf="!loading">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Type</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let complaint of complaints">
+          <td>{{ complaint.id }}</td>
+          <td>{{ complaint.crimeType }}</td>
+          <td>{{ complaint.phone }}</td>
+          <td>{{ complaint.status }}</td>
+          <td class="actions">
+            <button type="button" (click)="approve(complaint.id)">Approve</button>
+            <button type="button" (click)="reject(complaint.id)">Reject</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </article>
+</section>

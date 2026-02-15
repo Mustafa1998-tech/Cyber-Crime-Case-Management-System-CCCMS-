@@ -1,0 +1,103 @@
+.meta {
+  margin-top: -0.3rem;
+  color: var(--ink-1);
+}
+
+.cards {
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+
+.metric h2 {
+  margin-bottom: 0.2rem;
+  font-size: 2rem;
+}
+
+.metric p {
+  margin: 0;
+  color: var(--ink-1);
+}
+
+.insights {
+  margin-top: 0.9rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.list-row {
+  margin-top: 0.8rem;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.35rem;
+}
+
+.head span {
+  color: var(--ink-1);
+}
+
+.bar {
+  width: 100%;
+  height: 0.48rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.bar span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ea6d3d 0%, #f2b260 100%);
+}
+
+.trend {
+  margin-top: 0.9rem;
+}
+
+.trend-grid {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: repeat(12, minmax(42px, 1fr));
+}
+
+.month {
+  display: grid;
+  gap: 0.3rem;
+  justify-items: center;
+}
+
+.month .label {
+  font-size: 0.7rem;
+  color: var(--ink-1);
+}
+
+.month strong {
+  font-size: 0.72rem;
+  color: var(--ink-1);
+}
+
+.trend-bar {
+  width: 100%;
+  height: 90px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.trend-bar span {
+  width: 100%;
+  min-height: 4%;
+  background: linear-gradient(180deg, #f2b260 0%, #ea6d3d 100%);
+}
+
+@media (max-width: 900px) {
+  .trend-grid {
+    grid-template-columns: repeat(6, minmax(42px, 1fr));
+  }
+}

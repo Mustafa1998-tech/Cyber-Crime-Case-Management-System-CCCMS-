@@ -1,0 +1,13 @@
+.assign {
+  margin-bottom: 1rem;
+}
+
+.assign-form {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  align-items: end;
+}
+
+td select {
+  width: 170px;
+  margin-right: 0.4rem;
+}
