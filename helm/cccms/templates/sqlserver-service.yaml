@@ -1,0 +1,16 @@
+{{- if .Values.sqlserver.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "cccms.fullname" . }}-sqlserver
+  labels:
+    app: {{ include "cccms.fullname" . }}-sqlserver
+spec:
+  selector:
+    app: {{ include "cccms.fullname" . }}-sqlserver
+  ports:
+    - name: tds
+      port: {{ .Values.sqlserver.service.port }}
+      targetPort: {{ .Values.sqlserver.service.port }}
+  type: ClusterIP
+{{- end }}

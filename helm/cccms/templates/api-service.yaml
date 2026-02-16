@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "cccms.fullname" . }}-api
+  labels:
+    app: {{ include "cccms.fullname" . }}-api
+spec:
+  selector:
+    app: {{ include "cccms.fullname" . }}-api
+  ports:
+    - name: http
+      port: {{ .Values.api.service.httpPort }}
+      targetPort: {{ .Values.api.service.httpPort }}
+    - name: https
+      port: {{ .Values.api.service.httpsPort }}
+      targetPort: {{ .Values.api.service.httpsPort }}
+  type: {{ .Values.api.service.type }}

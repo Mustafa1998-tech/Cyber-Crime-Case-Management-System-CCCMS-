@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cccms-frontend
+  namespace: cccms
+  labels:
+    app: cccms-frontend
+spec:
+  selector:
+    app: cccms-frontend
+  ports:
+    - name: http
+      port: 4200
+      targetPort: 80
+  type: LoadBalancer

@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cccms.fullname" . }}-api
+  labels:
+    app: {{ include "cccms.fullname" . }}-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "cccms.fullname" . }}-api
+  template:
+    metadata:
+      labels:
+        app: {{ include "cccms.fullname" . }}-api
+    spec:
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: api
+          image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}"
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.api.service.httpPort }}
+              name: http
+            - containerPort: {{ .Values.api.service.httpsPort }}
+              name: https
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: {{ .Values.api.env.aspnetcoreEnvironment | quote }}
+            - name: HttpsRedirection__HttpsPort
+              value: {{ .Values.api.env.httpsPort | quote }}
+            - name: Kestrel__Endpoints__Http__Url
+              value: {{ .Values.api.env.httpUrl | quote }}
+            - name: Kestrel__Endpoints__Https__Url
+              value: {{ .Values.api.env.httpsUrl | quote }}
+            - name: ConnectionStrings__DefaultConnection
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "cccms.fullname" . }}-secrets
+                  key: CONNECTION_STRING
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 12
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 6

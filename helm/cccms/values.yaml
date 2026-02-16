@@ -1,0 +1,41 @@
+global:
+  imagePullSecrets: []
+
+sqlserver:
+  enabled: true
+  image:
+    repository: mcr.microsoft.com/mssql/server
+    tag: "2022-latest"
+    pullPolicy: IfNotPresent
+  saPassword: "sa@123456789"
+  database: "NciemsDb.Dev"
+  service:
+    port: 1433
+  persistence:
+    enabled: true
+    size: 8Gi
+    storageClassName: ""
+
+api:
+  image:
+    repository: ghcr.io/mustafa1998-tech/cyber-crime-case-management-system-cccms/cccms-api
+    tag: "latest"
+    pullPolicy: Always
+  env:
+    aspnetcoreEnvironment: Development
+    httpsPort: 7261
+    httpUrl: http://0.0.0.0:5289
+    httpsUrl: https://0.0.0.0:7261
+  service:
+    type: LoadBalancer
+    httpPort: 5289
+    httpsPort: 7261
+
+frontend:
+  image:
+    repository: ghcr.io/mustafa1998-tech/cyber-crime-case-management-system-cccms/cccms-frontend
+    tag: "latest"
+    pullPolicy: Always
+  service:
+    type: LoadBalancer
+    port: 4200

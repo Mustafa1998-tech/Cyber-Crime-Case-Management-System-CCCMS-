@@ -69,6 +69,74 @@ Notes:
 - SQL data is persisted in the named volume `sqlserver-data`.
 - SQL password can be overridden with `MSSQL_SA_PASSWORD` in a root `.env` file.
 
+## Kubernetes (Docker Desktop)
+1. In Docker Desktop, enable Kubernetes:
+- `Settings` -> `Kubernetes` -> `Enable Kubernetes`
+
+2. Verify context:
+```powershell
+kubectl config current-context
+kubectl get nodes
+```
+
+3. Deploy manifests:
+```powershell
+kubectl apply -f k8s/namespace.yaml
+kubectl apply -f k8s/
+```
+
+4. Check resources:
+```powershell
+kubectl get pods,svc -n cccms
+```
+
+Endpoints:
+- Frontend: `http://localhost:4200`
+- API OpenAPI: `https://localhost:7261/openapi/v1.json`
+
+If LoadBalancer is not exposed on localhost in your Docker Desktop setup, use:
+```powershell
+kubectl port-forward svc/cccms-frontend 4200:4200 -n cccms
+kubectl port-forward svc/cccms-api 7261:7261 -n cccms
+```
+
+Notes:
+- Default SQL password in `k8s/secret.yaml` is `sa@123456789` (change it before shared usage).
+- If GHCR images are private, create an image pull secret and attach it to the deployments.
+
+## Helm (Docker Desktop Kubernetes)
+1. Install Helm:
+```powershell
+winget install Helm.Helm
+```
+or:
+```powershell
+choco install kubernetes-helm
+```
+
+2. Install/upgrade chart:
+```powershell
+helm upgrade --install cccms ./helm/cccms --namespace cccms --create-namespace
+```
+
+3. (Optional) Use GHCR pull secret:
+```powershell
+kubectl create secret docker-registry ghcr-creds `
+  --docker-server=ghcr.io `
+  --docker-username=<github-username> `
+  --docker-password=<github-token> `
+  --namespace cccms
+
+helm upgrade --install cccms ./helm/cccms `
+  --namespace cccms `
+  --set global.imagePullSecrets[0].name=ghcr-creds
+```
+
+4. Uninstall:
+```powershell
+helm uninstall cccms -n cccms
+```
+
 ## QA / QC Tests
 Run automated quality and security checks:
 

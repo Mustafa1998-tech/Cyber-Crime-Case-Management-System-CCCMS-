@@ -1,0 +1,9 @@
+1. Frontend service:
+   kubectl get svc {{ include "cccms.fullname" . }}-frontend -n {{ .Release.Namespace }}
+
+2. API service:
+   kubectl get svc {{ include "cccms.fullname" . }}-api -n {{ .Release.Namespace }}
+
+3. If Docker Desktop does not expose LoadBalancer ports on localhost, use:
+   kubectl port-forward svc/{{ include "cccms.fullname" . }}-frontend 4200:{{ .Values.frontend.service.port }} -n {{ .Release.Namespace }}
+   kubectl port-forward svc/{{ include "cccms.fullname" . }}-api 7261:{{ .Values.api.service.httpsPort }} -n {{ .Release.Namespace }}

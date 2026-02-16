@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cccms-api
+  namespace: cccms
+  labels:
+    app: cccms-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cccms-api
+  template:
+    metadata:
+      labels:
+        app: cccms-api
+    spec:
+      containers:
+        - name: api
+          image: ghcr.io/mustafa1998-tech/cyber-crime-case-management-system-cccms/cccms-api:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5289
+              name: http
+            - containerPort: 7261
+              name: https
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: HttpsRedirection__HttpsPort
+              value: "7261"
+            - name: Kestrel__Endpoints__Http__Url
+              value: http://0.0.0.0:5289
+            - name: Kestrel__Endpoints__Https__Url
+              value: https://0.0.0.0:7261
+            - name: ConnectionStrings__DefaultConnection
+              valueFrom:
+                secretKeyRef:
+                  name: cccms-secrets
+                  key: CONNECTION_STRING
+          readinessProbe:
+            tcpSocket:
+              port: 5289
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 12
+          livenessProbe:
+            tcpSocket:
+              port: 5289
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 6

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cccms-frontend
+  namespace: cccms
+  labels:
+    app: cccms-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cccms-frontend
+  template:
+    metadata:
+      labels:
+        app: cccms-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: ghcr.io/mustafa1998-tech/cyber-crime-case-management-system-cccms/cccms-frontend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 6
