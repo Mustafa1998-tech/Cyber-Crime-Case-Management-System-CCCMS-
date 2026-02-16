@@ -4,6 +4,24 @@
 2. API service:
    kubectl get svc {{ include "cccms.fullname" . }}-api -n {{ .Release.Namespace }}
 
+{{- if .Values.monitoring.enabled }}
+3. Monitoring services:
+   kubectl get svc {{ include "cccms.fullname" . }}-prometheus -n {{ .Release.Namespace }}
+   kubectl get svc {{ include "cccms.fullname" . }}-grafana -n {{ .Release.Namespace }}
+
+4. Grafana login:
+   Username: {{ .Values.monitoring.grafana.adminUser }}
+   Password: {{ .Values.monitoring.grafana.adminPassword }}
+{{- end }}
+
+{{- if .Values.monitoring.enabled }}
+5. If Docker Desktop does not expose LoadBalancer ports on localhost, use:
+{{- else }}
 3. If Docker Desktop does not expose LoadBalancer ports on localhost, use:
+{{- end }}
    kubectl port-forward svc/{{ include "cccms.fullname" . }}-frontend 4200:{{ .Values.frontend.service.port }} -n {{ .Release.Namespace }}
    kubectl port-forward svc/{{ include "cccms.fullname" . }}-api 7261:{{ .Values.api.service.httpsPort }} -n {{ .Release.Namespace }}
+{{- if .Values.monitoring.enabled }}
+   kubectl port-forward svc/{{ include "cccms.fullname" . }}-prometheus 9090:{{ .Values.monitoring.prometheus.service.port }} -n {{ .Release.Namespace }}
+   kubectl port-forward svc/{{ include "cccms.fullname" . }}-grafana 3000:{{ .Values.monitoring.grafana.service.port }} -n {{ .Release.Namespace }}
+{{- end }}

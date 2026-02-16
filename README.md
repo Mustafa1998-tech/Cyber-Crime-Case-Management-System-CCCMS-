@@ -93,15 +93,21 @@ kubectl get pods,svc -n cccms
 Endpoints:
 - Frontend: `http://localhost:4200`
 - API OpenAPI: `https://localhost:7261/openapi/v1.json`
+- Prometheus: `http://localhost:9090`
+- Grafana: `http://localhost:3000`
 
 If LoadBalancer is not exposed on localhost in your Docker Desktop setup, use:
 ```powershell
 kubectl port-forward svc/cccms-frontend 4200:4200 -n cccms
 kubectl port-forward svc/cccms-api 7261:7261 -n cccms
+kubectl port-forward svc/cccms-prometheus 9090:9090 -n cccms
+kubectl port-forward svc/cccms-grafana 3000:3000 -n cccms
 ```
 
 Notes:
 - Default SQL password in `k8s/secret.yaml` is `sa@123456789` (change it before shared usage).
+- Default Grafana credentials in `k8s/monitoring-secret.yaml`:
+  `admin` / `GrafanaAdmin@2026!`
 - If GHCR images are private, create an image pull secret and attach it to the deployments.
 
 ## Helm (Docker Desktop Kubernetes)
@@ -119,6 +125,17 @@ choco install kubernetes-helm
 helm upgrade --install cccms ./helm/cccms --namespace cccms --create-namespace
 ```
 
+Monitoring (enabled by default in Helm values):
+- Prometheus service: `cccms-prometheus` (port `9090`)
+- Grafana service: `cccms-grafana` (port `3000`)
+- Grafana default login: `admin` / `GrafanaAdmin@2026!`
+
+Example port-forward:
+```powershell
+kubectl port-forward svc/cccms-prometheus 9090:9090 -n cccms
+kubectl port-forward svc/cccms-grafana 3000:3000 -n cccms
+```
+
 3. (Optional) Use GHCR pull secret:
 ```powershell
 kubectl create secret docker-registry ghcr-creds `
@@ -132,7 +149,12 @@ helm upgrade --install cccms ./helm/cccms `
   --set global.imagePullSecrets[0].name=ghcr-creds
 ```
 
-4. Uninstall:
+4. Disable monitoring (optional):
+```powershell
+helm upgrade --install cccms ./helm/cccms --namespace cccms --set monitoring.enabled=false
+```
+
+5. Uninstall:
 ```powershell
 helm uninstall cccms -n cccms
 ```

@@ -1,0 +1,16 @@
+{{- if .Values.monitoring.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "cccms.fullname" . }}-prometheus
+  labels:
+    app: {{ include "cccms.fullname" . }}-prometheus
+spec:
+  selector:
+    app: {{ include "cccms.fullname" . }}-prometheus
+  ports:
+    - name: http
+      port: {{ .Values.monitoring.prometheus.service.port }}
+      targetPort: {{ .Values.monitoring.prometheus.service.port }}
+  type: {{ .Values.monitoring.prometheus.service.type }}
+{{- end }}

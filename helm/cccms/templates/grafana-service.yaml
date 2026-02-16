@@ -1,0 +1,16 @@
+{{- if .Values.monitoring.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "cccms.fullname" . }}-grafana
+  labels:
+    app: {{ include "cccms.fullname" . }}-grafana
+spec:
+  selector:
+    app: {{ include "cccms.fullname" . }}-grafana
+  ports:
+    - name: http
+      port: {{ .Values.monitoring.grafana.service.port }}
+      targetPort: {{ .Values.monitoring.grafana.service.port }}
+  type: {{ .Values.monitoring.grafana.service.type }}
+{{- end }}

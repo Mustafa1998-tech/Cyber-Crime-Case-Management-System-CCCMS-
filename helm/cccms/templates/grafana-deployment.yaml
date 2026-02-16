@@ -1,0 +1,63 @@
+{{- if .Values.monitoring.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cccms.fullname" . }}-grafana
+  labels:
+    app: {{ include "cccms.fullname" . }}-grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "cccms.fullname" . }}-grafana
+  template:
+    metadata:
+      labels:
+        app: {{ include "cccms.fullname" . }}-grafana
+    spec:
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: grafana
+          image: "{{ .Values.monitoring.grafana.image.repository }}:{{ .Values.monitoring.grafana.image.tag }}"
+          imagePullPolicy: {{ .Values.monitoring.grafana.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.monitoring.grafana.service.port }}
+          env:
+            - name: GF_SECURITY_ADMIN_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "cccms.fullname" . }}-grafana-secret
+                  key: GRAFANA_ADMIN_USER
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "cccms.fullname" . }}-grafana-secret
+                  key: GRAFANA_ADMIN_PASSWORD
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: {{ .Values.monitoring.grafana.service.port }}
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: {{ .Values.monitoring.grafana.service.port }}
+            initialDelaySeconds: 40
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 6
+          volumeMounts:
+            - name: grafana-datasource
+              mountPath: /etc/grafana/provisioning/datasources
+      volumes:
+        - name: grafana-datasource
+          configMap:
+            name: {{ include "cccms.fullname" . }}-grafana-datasource
+{{- end }}
