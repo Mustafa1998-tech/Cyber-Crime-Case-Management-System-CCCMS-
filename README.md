@@ -188,6 +188,13 @@ Created automatically on API startup in Development (`NciemsDb.Dev`):
 | ForensicAnalyst | `analyst.one@govportal.com` | `ForensicAnalyst@2026!Secure` | Required |
 | Prosecutor | `prosecutor.one@govportal.com` | `Prosecutor@2026!Secure` | Disabled |
 
+### Get Latest MFA OTP (Docker SQL Server)
+Use this command to fetch the latest OTP notification for `analyst.one@govportal.com`:
+
+```powershell
+docker exec cccms-sqlserver /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P "sa@123456789" -d "NciemsDb.Dev" -Q "SET NOCOUNT ON; SELECT TOP 1 n.Message, n.CreatedAtUtc FROM Notifications n JOIN Users u ON u.Id=n.UserId WHERE u.UserName='analyst.one@govportal.com' OR u.Email='analyst.one@govportal.com' ORDER BY n.CreatedAtUtc DESC;"
+```
+
 ## Key Rules Enforced
 - Role-based access and JWT auth with refresh tokens.
 - MFA challenge for privileged roles.
